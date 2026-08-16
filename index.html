@@ -3,19 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CV Portfolio // Research & Architecture</title>
+    <style>
+        :root {
+            --bg: #090b10;
+            --surface-panel: #11141d;
+            --surface-inner: #06080d;
+            --accent-cyan: #00f0ff;
+            --accent-green: #39ff14;
+            --accent-amber: #ffb700;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-darker: #475569;
+            --border: rgba(0, 240, 255, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Engineering Workstation Grid Layout */
+        .workstation-container {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        /* Left Control Panel Column */
+        .profile-panel {
+            background: var(--surface-panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: fit-content;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .identity-block img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .identity-block h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .identity-block .title-sub {
+            font-family: monospace;
+            color: var(--accent-cyan);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .bio-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* Core Engineering Specs List */
+        .spec-list {
+            list-style: none;
+            font-family: monospace;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 24px;
+        }
+
+        .spec-list li {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .spec-list span:first-child { color: var(--text-darker); }
+        .spec-list span:last-child { color: var(--text-primary); }
+
+        /* Right Content Dashboard Column */
+        .dashboard-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Module Header Component */
+        .module-header {
+            font-family: monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-darker);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .module-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Primary Interactive Feature Matrix */
+        .interactive-sandbox {
+            background: var(--surface-panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 24px;
+        }
+
+        .viewport-canvas {
+            background: var(--surface-inner);
+            border-radius: 12px;
+            aspect-ratio: 16/10;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .viewport-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            filter: grayscale(30%) contrast(110%);
+        }
+
+        /* Live Vector Grid Overlays */
+        .bounding-box {
+            position: absolute;
+            border: 2px solid var(--accent-green);
+            background: rgba(57, 255, 20, 0.04);
+            border-radius: 4px;
+            box-shadow: 0 0 16px rgba(57, 255, 20, 0.2);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .box-label {
+            position: absolute;
+            top: -20px;
+            left: -2px;
+            background: var(--accent-green);
+            color: #000;
+            font-family: monospace;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 2px 2px 0 0;
+            white-space: nowrap;
+        }
+
+        /* System Telemetry Metadata Console */
+        .telemetry-sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .console-log {
+            background: var(--surface-inner);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--accent-cyan);
+            height: 100%;
+            overflow-y: hidden;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .console-line {
+            margin-bottom: 6px;
+            display: flex;
+            gap: 8px;
+        }
+        .console-time { color: var(--text-darker); }
+
+        .sandbox-controls {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover, .control-btn.active {
+            background: rgba(0, 240, 255, 0.08);
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+        }
+
+        /* Portfolio Work Exhibition Grid */
+        .project-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--surface-panel);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .project-card h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .tag-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-family: monospace;
+            font-size: 10px;
+            background: var(--surface-inner);
+            color: var(--text-secondary);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        @media (max-width: 1024px) {
+            .workstation-container { grid-template-columns: 1fr; }
+            .interactive-sandbox { grid-template-columns: 1fr; }
+            .project-matrix { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header class="badge">Coming Soon</header>
-        <h1>Something amazing is in the works</h1>
-        <p>We are building a new digital experience. Enter your email below to get notified when we launch.</p>
+
+    <div class="workstation-container">
         
-        <form class="notify-form" onsubmit="event.preventDefault(); alert('Thank you! We will keep you updated.');">
-            <input type="email" placeholder="Enter your email address" required>
-            <button type="submit">Notify Me</button>
-        </form>
-    </div>
-</body>
-</html>
+        <!-- Left Side: Engineering Profile Terminal -->
+        <aside class="profile-panel">
+            
+                <!-- Fallback thematic SVG placeholder for developer avatar -->
+                <svg viewBox="0 0 100 100" class="developer-avatar" style="width:70px; height:70px; border-radius:12px; background:var(--surface-inner); border:1px solid var(--border); padding:12px; margin-bottom:16px;">
+                    <path d="M20,80 Q50,40 80,80 M50,20 A15,15 0 1,1 49.9,20" fill="none" stroke="var(--accent-cyan)" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <h1>Alex Chen</h1>
+                <div class="title-sub">CV Research Engineer</div>
+                <p class="bio-text">
+                    Specializing in low-latency edge deployment, spatial vision graph architecture, and custom tensor-optimized transformer pipelines.
+                </p>
+            </div>
+
+            <ul class="spec-list">
+                <li><span>CORE_STACK</span> <span>PyTorch / C++ / CUDA</span></li>
+                <li><span>ACTIVE_FIELD</span> <span>Embedded Perception</span></li>
+                <li><span>LOCATION</span> <span>San Francisco, CA</span></li>
+                <li><span>GITHUB</span> <span>@alex_vision_dev</span></li>
+            </ul>
